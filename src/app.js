@@ -3,16 +3,16 @@ const express = require("express");
 const { auth } = require("express-oauth2-jwt-bearer");
 const errorHandler = require("./middlewares/errorHandler");
 
+const { OAUTH_AUDIENCE, OAUTH_URL } = process.env;
 
-require('dotenv').config();
+require("dotenv").config();
 
-// Configuracion Middleware con el Servidor de Autorización 
+// Configuracion Middleware con el Servidor de Autorización
 const autenticacion = auth({
-  audience: process.env.OAUTH_AUDIENCE,
-  issuerBaseURL: process.env.OAUTH_URL,
+  audience: "http://localhost:3000/api/biblioteca",
+  issuerBaseURL: "https://dev-utn-frc-iaew.auth0.com/",
   tokenSigningAlg: "RS256",
 });
-
 
 const app = express();
 app.use(express.json());
@@ -21,7 +21,7 @@ app.use(express.json());
 const librosRouter = require("./routes/libros");
 
 //Configuramos el middleware de autenticacion
-app.use("/api/libros", autenticacion,  librosRouter);
+app.use("/api/libros", autenticacion, librosRouter);
 
 app.use(errorHandler);
 
